@@ -23,6 +23,7 @@ function AuthProvider({ children }){
         setToken(res);
         setUsername(data.username);
         localStorage.setItem("site", res);
+        navigate("/hello");
         return;
       }
       throw new Error('Authentication failed');
