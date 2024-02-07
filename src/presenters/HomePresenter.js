@@ -6,7 +6,7 @@ export default function HomePresenter() {
   const [res, setRes] = useState('');
   const navigate = useNavigate();
   const auth = useAuth();
-
+//7///////
   useEffect(() => {
     if (auth.token) {
       const url = process.env.REACT_APP_BACKEND_URL;
