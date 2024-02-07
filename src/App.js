@@ -4,6 +4,7 @@ import LoginPresenter from "./presenters/LoginPresenter";
 import HomePresenter from "./presenters/HomePresenter";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import AuthProvider from "./hooks/AuthProvider";
+// Define the main App component
 function App() {
   return (
     <div className="App">

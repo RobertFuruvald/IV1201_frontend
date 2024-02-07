@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import '../styling/loginView.css'
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function LoginView({username, setUsername, password, setPassword, handleSubmit, error}) {
+function LoginView({ username, setUsername, password, setPassword, handleSubmit, error }) {
   const [showError, setShowError] = useState(false);
 
   //add error handler from backend to specify what error from backend server
@@ -26,14 +26,14 @@ function LoginView({username, setUsername, password, setPassword, handleSubmit, 
     if (error.message.includes("auth/internal-error")) {
       return "Please enter a password";
     }
-    if(error.message.includes("Authentication failed")) {
+    if (error.message.includes("Authentication failed")) {
       return "Invalid username or password";
     }
 
     return error.message;
   }
 
-
+  //handle input change
   function handleInputChange() {
     setShowError(false);
   }
@@ -44,6 +44,7 @@ function LoginView({username, setUsername, password, setPassword, handleSubmit, 
     setShowError(!!error);
   }
 
+  // Render the login form and all components that related
   return (
     <div>
       <div className="container module">
