@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 function AuthProvider({ children }) {
   // State variables for token and user information
   const [token, setToken] = useState(localStorage.getItem("site") || "");
-  const [user, setUsername] = useState(null)
+  const [user, setUsername] = useState(localStorage.getItem("user") || "")
   // Access the navigation function from React Router
   const navigate = useNavigate();
 
@@ -33,6 +33,7 @@ function AuthProvider({ children }) {
         setUsername(data.username);
         // Save the token to local storage
         localStorage.setItem("site", res);
+        localStorage.setItem("user", data.username);
         // Navigat the user
         navigate("/hello");
         return;
@@ -51,6 +52,7 @@ function AuthProvider({ children }) {
     setToken("");
     setUsername("");
     localStorage.removeItem("site");
+    localStorage.removeItem("user");
     navigate("/");
   };
   // Provide authentication data to child components through context
