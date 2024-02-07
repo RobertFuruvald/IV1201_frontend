@@ -3,7 +3,7 @@ import '../styling/loginView.css'
 import { Link } from 'react-router-dom';
 
 function LoginView({ username, setUsername, password, setPassword, handleSubmit, error }) {
-  const [showError, setShowError] = useState(false);
+  const [showError, setShowError] = useState(!!error);
 
   //add error handler from backend to specify what error from backend server
   function errorHandling() {
