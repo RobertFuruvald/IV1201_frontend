@@ -1,5 +1,6 @@
 import React from "react";
 import '../styling/homeView.css'
+// Define the HomeView component
 export default function HomeView({res, user,  logOut}) {
 
   return (
