@@ -1,21 +1,19 @@
-import {useContext, createContext, useState} from "react";
+import React, { createContext, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
-function AuthProvider({ children }){
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("site") || "");
-  const [user, setUsername] = useState(null)
+  const [user, setUsername] = useState(null);
   const navigate = useNavigate();
+
   const login = async (data) => {
     try {
-      const URL = process.env.REACT_APP_BACKEND_URL;
-      const response = await fetch(URL + "api/auth/login", {
+      const URL = process.env.REACT_APP_BACKEND_URL + "/api/auth/login";
+      const response = await fetch(URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Add any other headers if needed
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
       if (response.ok) {
@@ -24,14 +22,14 @@ function AuthProvider({ children }){
         setUsername(data.username);
         localStorage.setItem("site", res);
         navigate("/hello");
-        return;
+      } else {
+        throw new Error('Authentication failed');
       }
-      throw new Error('Authentication failed');
-    }catch (err) {
+    } catch (err) {
       throw new Error('Authentication failed');
     }
+  };
 
-  }
   const logOut = () => {
     setToken("");
     setUsername("");
@@ -44,11 +42,4 @@ function AuthProvider({ children }){
       {children}
     </AuthContext.Provider>
   );
-};
-
-
-export default AuthProvider;
-
-export function useAuth(){
-  return useContext(AuthContext);
 };

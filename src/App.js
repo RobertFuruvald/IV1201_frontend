@@ -1,40 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
-import LoginPresenter from "./presenters/LoginPresenter";
-import HomePresenter from "./presenters/HomePresenter";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import AuthProvider from "./hooks/AuthProvider";
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext"; // Corrected import path
+import LoginView from "./views/LoginView";
+
 function App() {
   return (
     <div className="App">
-
-{/*      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo"/>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>*/}
-      {
-        <Router>
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<LoginPresenter/>}/>
-              <Route path="/hello" element={<HomePresenter/>}/>
-            </Routes>
-          </AuthProvider>
-        </Router>
-
-
-      }
-
+      <Router>
+        <AuthProvider> {/* Correct usage based on the corrected import */}
+          <Routes>
+            <Route path="/" element={<LoginView />} />
+          </Routes>
+        </AuthProvider>
+      </Router>
     </div>
   );
 }

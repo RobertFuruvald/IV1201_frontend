@@ -1,92 +1,48 @@
-import React, {useState} from 'react';
-import '../styling/loginView.css'
-import {Link} from 'react-router-dom';
+import React, { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import '../assets/styles/loginView.css';
 
-function LoginView({username, setUsername, password, setPassword, handleSubmit, error}) {
-  const [showError, setShowError] = useState(false);
+const LoginView = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { login } = useAuth();
 
-  //add error handler from backend to specify what error from backend server
-  function errorHandling() {
-    if (!error.message) {
-      return '';
-    }
-
-    if (error.message.includes("auth/username")) {
-      return "Invalid username, try again";
-    }
-
-    if (error.message.includes("auth/user-not-found")) {
-      return "No user is connected to this E–Mail"
-    }
-
-    if (error.message.includes("auth/wrong-password")) {
-      return "Wrong password, please try again";
-    }
-
-    if (error.message.includes("auth/internal-error")) {
-      return "Please enter a password";
-    }
-    if(error.message.includes("Authentication failed")) {
-      return "Invalid username or password";
-    }
-
-    return error.message;
-  }
-
-
-  function handleInputChange() {
-    setShowError(false);
-  }
-
-  function handleFormSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleSubmit(e);
-    setShowError(!!error);
-  }
+    setError(''); // Clear any existing errors
+    try {
+      await login({ username, password });
+    } catch (err) {
+      setError(err.message); // Set error if login fails
+    }
+  };
 
   return (
     <div>
-      <div className="container module">
-        <p className='pLogin'>Log into your account</p>
-        <div className={`error ${showError ? '' : 'errorhidden'}`}>
-          {errorHandling()}
-        </div>
-        <form onSubmit={handleFormSubmit}>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
           <input
-            className="login-input"
             type="text"
-            id="text"
-            name="text"
-            placeholder="username"
             value={username}
-            onChange={(e) => {
-              handleInputChange();
-              setUsername(e.target.value)
-            }}
-            required
+            onChange={(e) => setUsername(e.target.value)}
           />
+        </div>
+        <div>
+          <label>Password:</label>
           <input
-            className="login-input"
             type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
             value={password}
-            onChange={(e) => {
-              handleInputChange();
-              setPassword(e.target.value)
-            }}
-            required
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <Link to="/reset">forgot your password?</Link>
-          <button className="sign-in" type="submit">Sign in</button>
-        </form>
-        <button className="create-account">
-          <Link to="/signup" className="create-account-text">Create an account</Link>
-        </button>
-      </div>
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button type="submit">Login</button>
+      </form>
     </div>
   );
-}
+};
 
 export default LoginView;
