@@ -1,58 +1,44 @@
 import React, { useState } from 'react';
 import '../styling/loginView.css'
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import {useAuth} from "../hooks/AuthProvider";
+import HomeView from "./HomeView";
 
-function LoginView({ username, setUsername, password, setPassword, handleSubmit, error }) {
-  const [showError, setShowError] = useState(!!error);
+export default function LoginView() {
+  const auth = useAuth();
+  // State variables to store username, password, and error message
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  let navigate = useNavigate();
 
-  //add error handler from backend to specify what error from backend server
-  function errorHandling() {
-    if (!error.message) {
-      return '';
+  // Function to handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Check if username and password are not empty
+    try {
+      if (username !== '' && password !== '') {
+        await auth.login({ username: username, password: password });
+        navigate("/hello")
+      }
+    } catch (err) {
+      setError(err); // Set error state if authentication fails then error message to the console
     }
-
-    if (error.message.includes("auth/username")) {
-      return "Invalid username, try again";
-    }
-
-    if (error.message.includes("auth/user-not-found")) {
-      return "No user is connected to this E–Mail"
-    }
-
-    if (error.message.includes("auth/wrong-password")) {
-      return "Wrong password, please try again";
-    }
-
-    if (error.message.includes("auth/internal-error")) {
-      return "Please enter a password";
-    }
-    if (error.message.includes("Authentication failed")) {
-      return "Invalid username or password";
-    }
-
-    return error.message;
-  }
-
-  //handle input change
+  };
+  //handle input change to remove errorHandler
   function handleInputChange() {
-    setShowError(false);
+    setError('');
   }
-
-  function handleFormSubmit(e) {
-    e.preventDefault();
-    handleSubmit(e);
-    setShowError(!!error);
-  }
-
   // Render the login form and all components that related
   return (
+    <>{!auth.token ?
     <div>
       <div className="container module">
         <p className='pLogin'>Log into your account</p>
-        <div className={`error ${showError ? '' : 'errorhidden'}`}>
-          {errorHandling()}
+        <div className={`error ${error ? '' : 'error-hidden'}`}>
+          Invalid username or password
         </div>
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
             className="login-input"
             type="text"
@@ -86,8 +72,8 @@ function LoginView({ username, setUsername, password, setPassword, handleSubmit,
           <Link to="/signup" className="create-account-text">Create an account</Link>
         </button>
       </div>
-    </div>
+    </div> : <HomeView />}
+
+    </>
   );
 }
-
-export default LoginView;

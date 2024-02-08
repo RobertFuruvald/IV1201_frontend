@@ -1,3 +1,18 @@
 h1 {
   color:black;
 }
+button[type="button"] {
+  background-color: #444; /* set a dark grey button background color */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 200px; /* add a fixed width of 200px to match the Create an account button */
+}
+
+button[type="button"]:hover {
+  background-color: #222; /* set a darker shade of grey on hover */
+}
