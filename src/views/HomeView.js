@@ -41,7 +41,7 @@ export default function HomeView() {
   return (
     <div>
       <h1>{res}</h1>
-      <h2>Welcome! {auth.user} </h2>
+      <h2>Welcome! {auth.user} Role: {auth.role} </h2>
       <button type="button" onClick={auth.logOut}>Logout</button>
     </div>
   );

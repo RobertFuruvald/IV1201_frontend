@@ -7,8 +7,8 @@ const AuthContext = createContext(null);
 function AuthProvider({ children }) {
   // State variables for token and user information
   const [token, setToken] = useState(sessionStorage.getItem("site") || "");
-  const [user, setUsername] = useState(sessionStorage.getItem("user") || "")
-  const [role, setRole] = useState(sessionStorage.getItem("role") || "")
+  const [user, setUsername] = useState(sessionStorage.getItem("user") || "");
+  const [role, setRole] = useState(sessionStorage.getItem("role") || "");
   // Access the navigation function from React Router
 
   // Function to handle user login
@@ -26,18 +26,15 @@ function AuthProvider({ children }) {
       });
       // If the login request is successful
       if (response.ok) {
-        const res = await response.text();
+        const res = await response.json();
         // Set the token and username in state
         setUsername(data.username);
-        setToken(res);
-        /*setToken(res.token);
-        setRole(res.role)*/
+        setToken(res.token);
+        setRole(res.roles);
         // Save the token to local storage
-        sessionStorage.setItem("site", res);
-        /*sessionStorage.setItem("site", res.token);
-        sessionStorage.setItem("role", res.role)*/
+        sessionStorage.setItem("site", res.token);
+        sessionStorage.setItem("role", res.roles);
         sessionStorage.setItem("user", data.username);
-
         return;
       }
       // If authentication fails, throw the error
@@ -52,6 +49,7 @@ function AuthProvider({ children }) {
     // Clear token, username, and local storage
     setToken("");
     setUsername("");
+    setRole("");
     sessionStorage.removeItem("site");
     sessionStorage.removeItem("user");
     sessionStorage.removeItem("role");
@@ -59,7 +57,7 @@ function AuthProvider({ children }) {
   // Provide authentication data to child components through context
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logOut }}>
+    <AuthContext.Provider value={{ user, token, role, login, logOut }}>
       {children}
     </AuthContext.Provider>
   );
