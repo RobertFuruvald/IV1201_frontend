@@ -17,6 +17,7 @@ function AuthProvider({ children }) {
     try {
       // Fetch the backend URL from environment variables
       const URL = process.env.REACT_APP_BACKEND_URL;
+      console.log(URL);
       const response = await fetch(URL + "api/auth/login", {
         method: 'POST',
         headers: {
