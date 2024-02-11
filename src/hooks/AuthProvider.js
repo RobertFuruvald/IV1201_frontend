@@ -1,5 +1,4 @@
 import { useContext, createContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Create a context for authentication data
 const AuthContext = createContext(null);
@@ -7,10 +6,10 @@ const AuthContext = createContext(null);
 // Create an authentication provider component
 function AuthProvider({ children }) {
   // State variables for token and user information
-  const [token, setToken] = useState(localStorage.getItem("site") || "");
-  const [user, setUsername] = useState(localStorage.getItem("user") || "")
+  const [token, setToken] = useState(sessionStorage.getItem("site") || "");
+  const [user, setUsername] = useState(sessionStorage.getItem("user") || "");
+  const [role, setRole] = useState(sessionStorage.getItem("role") || "");
   // Access the navigation function from React Router
-  const navigate = useNavigate();
 
   // Function to handle user login
   const login = async (data) => {
@@ -27,21 +26,20 @@ function AuthProvider({ children }) {
       });
       // If the login request is successful
       if (response.ok) {
-        const res = await response.text();
+        const res = await response.json();
         // Set the token and username in state
-        setToken(res);
         setUsername(data.username);
+        setToken(res.token);
+        setRole(res.roles);
         // Save the token to local storage
-        localStorage.setItem("site", res);
-        localStorage.setItem("user", data.username);
-        // Navigat the user
-        navigate("/hello");
+        sessionStorage.setItem("site", res.token);
+        sessionStorage.setItem("role", res.roles);
+        sessionStorage.setItem("user", data.username);
         return;
       }
       // If authentication fails, throw the error
       throw new Error('Authentication failed');
     } catch (err) {
-
       throw new Error('Authentication failed');
     }
 
@@ -51,14 +49,15 @@ function AuthProvider({ children }) {
     // Clear token, username, and local storage
     setToken("");
     setUsername("");
-    localStorage.removeItem("site");
-    localStorage.removeItem("user");
-    navigate("/");
+    setRole("");
+    sessionStorage.removeItem("site");
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("role");
   };
   // Provide authentication data to child components through context
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logOut }}>
+    <AuthContext.Provider value={{ user, token, role, login, logOut }}>
       {children}
     </AuthContext.Provider>
   );
