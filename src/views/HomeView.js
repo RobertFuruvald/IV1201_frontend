@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import '../styling/homeView.css'
 import {useNavigate} from "react-router-dom";
-import {useAuth} from "../hooks/AuthProvider";
+import {useAuth} from "../hooks/useAuth";
 // Define the HomeView component
 export default function HomeView() {
 // State variable for backend response storage

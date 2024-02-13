@@ -1,20 +1,20 @@
 import '../styling/signUpView.css';
-import React, { useState } from 'react';
-import DataSource from '../hooks/dataSource';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import DataSource from '../api/dataSource';
+import {useNavigate} from 'react-router-dom';
+import useInputChange from "../hooks/useInputChange";
 
-function SignUpView(props) {
+function SignUpView() {
   const navigate = useNavigate();
-
   const [error, setError] = useState('');
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [pnr, setPnr] = useState('');
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSignUp = () => {
+  const [name, setName] = useInputChange('');
+  const [surname, setSurname] = useInputChange('');
+  const [pnr, setPnr] = useInputChange('');
+  const [email, setEmail] = useInputChange('');
+  const [username, setUsername] = useInputChange('');
+  const [password, setPassword] = useInputChange('');
+  const handleSignUp = async (e) => {
+    e.preventDefault();
      setError('');
      if (!name || !surname || !pnr || !email || !username || !password) {
          setError('All fields are required');
@@ -25,80 +25,76 @@ function SignUpView(props) {
        setError('Invalid email format');
       return;
      }
-      
-      const signUpData = { name, surname, pnr, email, username, password };
-  
-      DataSource.registerUser(signUpData)
-      .then(response => {
+    const signUpData = {name, surname, pnr, email, username, password};
+    await DataSource.registerUser(signUpData).then(response => {
        console.log('Registration successful:', response);
-        navigate('/');
-        return response;
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        setError(error.toString().substring(6));
+      setSuccess(response)
+      navigate('/');
+    }).catch(error => {
+      console.error('Error:', error);
+      setError(error);
       });
   };
 
 
   return (
-    <div className="signup-section">
-      <form className="signup-container" onSubmit={(e) => e.preventDefault()}>
-        <div className="input-group">
-          <div className="input-row">
+    <>
+      <div>
+        <div className="container module">
+          <p className='pSignup'>Create an account</p>
+          <div className={`error ${error ? '' : 'error-hidden'}`}>{error}</div>
+
+          <form onSubmit={handleSignUp}>
             <input
-              placeholder="NAME"
+              placeholder="Name"
               type="text"
-              className="input-box"
-              onChange={(e) => setName(e.target.value)}
+              className="signup-input"
+              onChange={setName}
+              required
             />
             <input
-              placeholder="SURNAME"
+              placeholder="Surname"
               type="text"
-              className="input-box"
-              onChange={(e) => setSurname(e.target.value)}
+              className="signup-input"
+              onChange={setSurname}
+              required
             />
-          </div>
-          <div className="input-row">
             <input
-              placeholder="PERSONAL NUMBER"
+              placeholder="Personal number"
               type="text"
-              className="input-box"
-              onChange={(e) => setPnr(e.target.value)}
+              className="signup-input"
+              onChange={setPnr}
+              required
             />
-          </div>
-          <div className="input-row">
             <input
-              placeholder="USERNAME"
+              placeholder="Username"
               type="text"
-              className="input-box"
-              onChange={(e) => setUsername(e.target.value)}
+              className="signup-input"
+              onChange={setUsername}
+              required
             />
-          </div>
-          <div className="input-row">
             <input
-              placeholder="EMAIL"
+              placeholder="Email"
               type="email"
-              className="input-box"
-              onChange={(e) => setEmail(e.target.value)}
+              className="signup-input"
+              onChange={setEmail}
+              required
             />
-          </div>
-          <div className="input-row">
             <input
-              placeholder="PASSWORD"
-              className="input-box"
+              placeholder="Password"
+              className="signup-input"
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={setPassword}
               autoComplete="new-password"
+              required
             />
-          </div>
+            <button type="submit">
+              REGISTER
+            </button>
+          </form>
         </div>
-        <p className="message-error">{error}</p>
-        <button className="login-button" onClick={handleSignUp}>
-          REGISTER
-        </button>
-      </form>
-    </div>
+      </div>
+    </>
   );
 }
 
