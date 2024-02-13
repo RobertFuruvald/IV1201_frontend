@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import '../styling/loginView.css'
 import {Link, useNavigate} from 'react-router-dom';
 import {useAuth} from "../hooks/useAuth";
@@ -47,7 +47,7 @@ export default function LoginView() {
             type="text"
             id="text"
             name="text"
-            placeholder="username"
+            placeholder="Username"
             value={username}
             onChange={(e) => handleInputChange(e, setUsername)}
               /*{(e) => {

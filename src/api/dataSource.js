@@ -1,7 +1,7 @@
 const DataSource = {
   apiCall(endpoint, method, data) {
    const url = process.env.REACT_APP_BACKEND_URL +`${endpoint}`;
-   console.log(url);
+
     return fetch(url, {
       method: method,
       headers: {
@@ -11,7 +11,7 @@ const DataSource = {
     })
     .then(response => {
       if (response.ok) {
-        return response.text();
+        return response.json();
       }
         return response.text().then(errorMessage => {
           throw new Error(errorMessage);
@@ -23,6 +23,7 @@ const DataSource = {
   registerUser(data) {
     return DataSource.apiCall('api/auth/register', 'POST', data);
   },
+
 };
 
 export default DataSource;
