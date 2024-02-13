@@ -2,7 +2,7 @@
 import React from 'react';
 
 function ExpertiseList({ expertiseList, onAdd, onClear, onSelectExpertise }) {
-    return (<div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px', width: '350px', float: 'left' }}>
+    return (<div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px', width: '350px', float: 'right' }}>
         <div style={{ height: '400px' }}>
             <ul>
                 {expertiseList.map(expertise => (
