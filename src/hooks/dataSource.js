@@ -1,4 +1,5 @@
 const DataSource = {
+  
   apiCall(endpoint, method, data) {
    const url = process.env.REACT_APP_BACKEND_URL +`${endpoint}`;
    console.log(url);
@@ -27,6 +28,7 @@ const DataSource = {
   loginUser(data) {
     return DataSource.apiCall('api/auth/login', 'POST', data);
   }
+
 };
 
 export default DataSource;

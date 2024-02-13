@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import AuthProvider from "./hooks/AuthProvider";
 import HeaderView from "./views/HeaderView";
 import SignUpView from "./views/SignUpView";
+import ApplicantSubmissionPageView from './views/ApplicantSubmissionPageView';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
                   <Route path="/signup" element={<SignUpView />} />
                   <Route path="/" element={<LoginView />} />
                   <Route path="/hello" element={<Home />} />
+                  <Route path="/application/submission" element={<ApplicantSubmissionPageView />} />
                   </Routes>
                 </div>
               }
