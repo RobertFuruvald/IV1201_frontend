@@ -39,8 +39,10 @@ export default function LoginView() {
       <div className="container module">
         <p className='pLogin'>Log into your account</p>
         <div className={`error ${error ? '' : 'error-hidden'}`}>
-          Invalid username or password
+
+        Invalid username or password
         </div>
+
         <form onSubmit={handleSubmit}>
           <input
             className="login-input"
@@ -50,10 +52,6 @@ export default function LoginView() {
             placeholder="Username"
             value={username}
             onChange={(e) => handleInputChange(e, setUsername)}
-              /*{(e) => {
-              handleInputChange();
-              setUsername(e.target.value)
-            }}*/
             required
           />
           <input
@@ -64,10 +62,6 @@ export default function LoginView() {
             placeholder="Password"
             value={password}
             onChange={(e) => handleInputChange(e, setPassword)}
-              /*{(e) => {
-              handleInputChange();
-              setPassword(e.target.value)
-            }}*/
             required
           />
           <Link to="/reset">forgot your password?</Link>
