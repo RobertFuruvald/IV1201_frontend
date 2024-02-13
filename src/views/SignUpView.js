@@ -27,8 +27,7 @@ function SignUpView() {
      }
     const signUpData = {name, surname, pnr, email, username, password};
     await DataSource.registerUser(signUpData).then(response => {
-       console.log('Registration successful:', response);
-      setSuccess(response)
+      console.log('Registration successful:', response);
       navigate('/');
     }).catch(error => {
       console.error('Error:', error);
