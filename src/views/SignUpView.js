@@ -1,8 +1,8 @@
 import '../styling/signUpView.css';
 import React, { useState } from 'react';
-import DataSource from '../hooks/dataSource';
+import DataSource from '../api/dataSource';
 import { useNavigate } from 'react-router-dom';
-
+import {useInputChange} from "../hooks/useInputChange";
 function SignUpView(props) {
   const navigate = useNavigate();
 
@@ -25,9 +25,9 @@ function SignUpView(props) {
        setError('Invalid email format');
       return;
      }
-      
+
       const signUpData = { name, surname, pnr, email, username, password };
-  
+
       DataSource.registerUser(signUpData)
       .then(response => {
        console.log('Registration successful:', response);

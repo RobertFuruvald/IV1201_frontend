@@ -1,11 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import '../styling/headerView.css';
-import { useAuth } from '../hooks/AuthProvider';
+import {useAuth} from "../hooks/useAuth";
 
 function HeaderView(props) {
   const auth = useAuth();
-  
+
   return (
     <header className="header">
       <nav>

@@ -2,7 +2,7 @@ import './App.css';
 import Home from "./views/HomeView";
 import LoginView from './views/LoginView';
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import AuthProvider from "./hooks/AuthProvider";
+import {AuthProvider} from "./contexts/AuthProvider";
 import HeaderView from "./views/HeaderView";
 import SignUpView from "./views/SignUpView";
 
