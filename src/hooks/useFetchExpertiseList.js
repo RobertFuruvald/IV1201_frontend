@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from "../hooks/AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 
 function useFetchExpertiseList() {
     const auth = useAuth();
