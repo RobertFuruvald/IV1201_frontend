@@ -18,8 +18,6 @@ const DataSource = {
           console.error("datasource: " + errorMessage);
           throw new Error(errorMessage);
         });
-
-
   },
   //Sends request to server to register a new user with form data
   registerUser(data) {
@@ -31,9 +29,9 @@ const DataSource = {
     });
   },
   /*Request current users personal information
-   *Takes authorization token as argument, gets a confirmation response from server */
-  getUserInfo(token) {
-    const response = DataSource.apiCall('user', 'GET', '', token);
+   *Takes authentication token as argument, gets a confirmation response from server */
+  getUserInfo(auth) {
+    const response = DataSource.apiCall(`api/persons/${auth.user}`, 'GET', auth.user, auth.token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
@@ -41,9 +39,10 @@ const DataSource = {
     });
   },
   /* Updates the current users personal information
-  *Takes authorization token as argument, and data for current user, gets a confirmation response from server */
+  *Takes authentication token as argument, and data for current user as objects {"name":"newname","surname":"newsurname","username":"newusername", "email":"newemail", "password";"newpswd"},
+  *  gets a confirmation response from server or an error why it did not update the information */
   updateUserInfo(data, token) {
-    const response = DataSource.apiCall('user', 'PUT', data, token);
+    const response = DataSource.apiCall(`api/persons/${data.username}`, 'PUT', data, token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
@@ -51,9 +50,19 @@ const DataSource = {
     });
   },
   /* Gets a list of competence information from the server for the current user
-  *Takes authorization token as argument, gets a list with the competence information for the current user */
-  getCompetences(token) {
-    const response = DataSource.apiCall('competence', 'GET', '', token);
+  *Takes authentication as argument, gets a list with the competence information for the current user or null */
+  getCompetenceForUser(auth) {
+    const response = DataSource.apiCall(`competence/${auth.user}`, 'GET', '', auth.token);
+    return response.then(res => {
+      return res.text()
+    }).catch(err => {
+      throw new Error(err.message)
+    });
+  },
+  /* Gets a list of competence information from the server
+  *Takes authentication as argument, gets a list with the competences that are available to choose from */
+  getCompetences(auth) {
+    const response = DataSource.apiCall(`competences`, 'GET', '', auth.token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
@@ -61,9 +70,19 @@ const DataSource = {
     });
   },
   /* Gets availability information from the server for the current user
-  *Takes authorization token as argument, gets the availability data for the current user */
-  getAvailability(token) {
-    const response = DataSource.apiCall('availability', 'GET', '', token);
+  *Takes authentication as argument, gets the availability data for the current user */
+  getAvailability(auth) {
+    const response = DataSource.apiCall(`availability/${auth.user}`, 'GET', '', auth.token);
+    return response.then(res => {
+      return res.text()
+    }).catch(err => {
+      throw new Error(err.message)
+    });
+  },
+  /* Register availability information to the server for the current user
+  *Takes authentication as argument and the availability data as an object,gets a confirmation response or error*/
+  registerAvailability(data, auth) {
+    const response = DataSource.apiCall(`availability`, 'POST', data, auth.token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
@@ -71,9 +90,9 @@ const DataSource = {
     });
   },
   /* Register an application to the server for the current user
-  *Takes authorization token, and form data as argument, gets a confirmation response from server */
+  *Takes authentication token, and form data as argument, gets a confirmation response from server */
   registerApplication(data, token) {
-    const response = DataSource.apiCall('application', 'POST', data, token);
+    const response = DataSource.apiCall(`application`, 'POST', data, token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
@@ -81,9 +100,9 @@ const DataSource = {
     });
   },
   /* Gets the application from the server for the current user
-  *Takes authorization token, gets the current users application data from server */
-  getApplication(token) {
-    const response = DataSource.apiCall('application', 'GET', '', token);
+  *Takes authentication as argument, gets the current users application data from server */
+  getApplication(auth) {
+    const response = DataSource.apiCall(`application/${auth.user}`, 'GET', auth.user, auth.token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
@@ -92,20 +111,25 @@ const DataSource = {
   },
 
   /* Gets a list of applications from the server
-  *Takes authorization token */
-  getApplications(token) {
-    const response = DataSource.apiCall('applications', 'GET', '', token);
+  *Takes authorization as argument*/
+  getListOfApplications(auth) {
+    const response = DataSource.apiCall('applications', 'GET', auth.user, auth.token);
     return response.then(res => {
       return res.text()
     }).catch(err => {
       throw new Error(err.message)
     });
   },
-
-
-
-
-
+  /* Gets a list of applications from the server
+  *Takes authorization token and the application data with {id, status} as argument*/
+  updateApplicationStatus(data, token) {
+    const response = DataSource.apiCall(`application/${data.id}`, 'PUT', data.status, token);
+    return response.then(res => {
+      return res.text()
+    }).catch(err => {
+      throw new Error(err.message)
+    });
+  },
 
 };
 export default DataSource;
