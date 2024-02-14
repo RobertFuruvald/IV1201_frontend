@@ -3,14 +3,22 @@ import React, { useState } from 'react';
 function useExpertiseSelection(initialExpertise = []) {
 
     // State to hold selected expertise items, initialized with `initialExpertise`
-    const [selectedExpertise, setSelectedExpertise] = useState(initialExpertise);
+    const [selectedExpertiseList, setSelectedExpertise] = useState(initialExpertise);
 
     // Function to add a new expertise item to the selection
+    // or remove it if it is already present
     // `expertise` parameter is the new item to be added
     // Update `selectedExpertise` by adding the new `expertise` item
     // Uses functional update form to ensure the latest state is used
-    const addExpertise = (expertise) => {
-        setSelectedExpertise(prev => [...prev, expertise]);
+    const toggleExpertise = (expertise) => {
+        setSelectedExpertise(prev => {
+            const isAlreadySelected = prev.some(selected => selected.competenceId === expertise.competenceId);
+            if (isAlreadySelected) {
+                return prev.filter(selected => selected.competenceId !== expertise.competenceId);
+            } else {
+                return [...prev, expertise];
+            }
+        });
     };
 
     // Function to clear all selected expertise items
@@ -24,8 +32,8 @@ function useExpertiseSelection(initialExpertise = []) {
     // `addExpertise` function allows adding a new item to the selection
     // `clearSelections` function allows clearing the entire selection
     return {
-        selectedExpertise,
-        addExpertise,
+        selectedExpertiseList,
+        toggleExpertise,
         clearSelections,
     };
 }

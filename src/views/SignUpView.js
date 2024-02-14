@@ -1,6 +1,6 @@
 import '../styling/signUpView.css';
 import React, { useState } from 'react';
-import DataSource from '../hooks/dataSource';
+import DataSource from '../api/dataSource';
 import { useNavigate } from 'react-router-dom';
 
 function SignUpView(props) {

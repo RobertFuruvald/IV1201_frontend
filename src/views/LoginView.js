@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styling/loginView.css'
 import {Link, useNavigate} from 'react-router-dom';
-import {useAuth} from "../hooks/AuthProvider";
+import {useAuth} from "../contexts/AuthProvider";
 import HomeView from "./HomeView";
 
 export default function LoginView() {

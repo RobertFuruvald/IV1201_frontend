@@ -3,14 +3,14 @@ import useExpertiseSelection from './useExpertiseSelection';
 
 function useApplicantSubmission() {
   const { expertiseList, isLoading, error } = useFetchExpertiseList();
-  const { selectedExpertise, addExpertise, clearSelections } = useExpertiseSelection();
+  const { selectedExpertiseList, toggleExpertise, clearSelections } = useExpertiseSelection();
 
   const handleSelectExpertise = (expertise) => {
-    addExpertise(expertise);
+    toggleExpertise(expertise);
   };
 
   const handleAddSelectedExpertise = () => {
-    console.log(selectedExpertise)
+    console.log(selectedExpertiseList)
   };
 
   const handleClearSelectedExpertise = () => {
@@ -21,7 +21,7 @@ function useApplicantSubmission() {
     expertiseList,
     isLoading,
     error,
-    selectedExpertise,
+    selectedExpertiseList,
     handleSelectExpertise,
     handleAddSelectedExpertise,
     handleClearSelectedExpertise,

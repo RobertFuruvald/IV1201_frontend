@@ -1,0 +1,25 @@
+.applicationField {
+    height: 500px; /* Set the height */
+    overflow-y: scroll; /* Enable vertical scrolling */
+    border: 2px solid transparent; /* Invisible border */
+    border-radius: 20px; /* Rounded edges */
+    background-color: #ebe9e6; /* Slightly greyish paper color */
+}
+
+.expertiseRow {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+    margin-bottom: 10px; /* Adds some space between rows */
+}
+
+.expertiseRow span {
+    margin-right: 10px; /* Adds some space between the name and the form */
+}
+
+form {
+    margin: 0; /* Removes default form margin */
+}
+
+.nameSpan {
+    width: 200px
+}
