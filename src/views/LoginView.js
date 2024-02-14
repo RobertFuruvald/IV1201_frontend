@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import '../styling/loginView.css'
 import {Link, useNavigate} from 'react-router-dom';
-import {useAuth} from "../contexts/AuthProvider";
+import {useAuth} from "../hooks/useAuth";
+import useInputChange from "../hooks/useInputChange";
 import HomeView from "./HomeView";
 
 export default function LoginView() {
   const auth = useAuth();
   // State variables to store username, password, and error message
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useInputChange('');
+  const [password, setPassword] = useInputChange('');
   const [error, setError] = useState('');
   let navigate = useNavigate();
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
+    setError('');
     event.preventDefault();
     // Check if username and password are not empty
     try {
@@ -26,7 +28,8 @@ export default function LoginView() {
     }
   };
   //handle input change to remove errorHandler
-  function handleInputChange() {
+  function handleInputChange(e, setData) {
+    setData(e);
     setError('');
   }
   // Render the login form and all components that related
@@ -36,20 +39,19 @@ export default function LoginView() {
       <div className="container module">
         <p className='pLogin'>Log into your account</p>
         <div className={`error ${error ? '' : 'error-hidden'}`}>
-          Invalid username or password
+
+        Invalid username or password
         </div>
+
         <form onSubmit={handleSubmit}>
           <input
             className="login-input"
             type="text"
             id="text"
             name="text"
-            placeholder="username"
+            placeholder="Username"
             value={username}
-            onChange={(e) => {
-              handleInputChange();
-              setUsername(e.target.value)
-            }}
+            onChange={(e) => handleInputChange(e, setUsername)}
             required
           />
           <input
@@ -59,10 +61,7 @@ export default function LoginView() {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => {
-              handleInputChange();
-              setPassword(e.target.value)
-            }}
+            onChange={(e) => handleInputChange(e, setPassword)}
             required
           />
           <Link to="/reset">forgot your password?</Link>

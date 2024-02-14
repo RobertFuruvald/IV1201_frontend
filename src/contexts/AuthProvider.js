@@ -1,10 +1,10 @@
 import { useContext, createContext, useState } from "react";
 
 // Create a context for authentication data
-const AuthContext = createContext(null);
+export const AuthContext = createContext(null);
 
 // Create an authentication provider component
-function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   // State variables for token and user information
   const [token, setToken] = useState(sessionStorage.getItem("site") || "");
   const [user, setUsername] = useState(sessionStorage.getItem("user") || "");
@@ -61,11 +61,4 @@ function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-};
-
-
-export default AuthProvider;
-
-export function useAuth() {
-  return useContext(AuthContext);
 };
