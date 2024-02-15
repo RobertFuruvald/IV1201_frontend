@@ -1,9 +1,12 @@
 .applicationField {
-    height: 500px; /* Set the height */
+    min-height: 400px; /* Set the height */
     overflow-y: scroll; /* Enable vertical scrolling */
     border: 2px solid transparent; /* Invisible border */
     border-radius: 20px; /* Rounded edges */
     background-color: #ebe9e6; /* Slightly greyish paper color */
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 1000px;
 }
 
 .expertiseRow {

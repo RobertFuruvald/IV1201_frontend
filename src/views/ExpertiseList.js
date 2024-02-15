@@ -2,7 +2,7 @@
 import React from 'react';
 import '../styling/ExpertiseList.css'; // Ensure the CSS file is correctly imported
 
-function ExpertiseList({ expertiseList, onAdd, onClear, onSelectExpertise, selectedExpertiseList }) {
+function ExpertiseList({ expertiseList, onSelectExpertise, selectedExpertiseList }) {
     return (
         <div className="expertiseContainer">
             <div className="expertiseListContainer">
@@ -17,10 +17,6 @@ function ExpertiseList({ expertiseList, onAdd, onClear, onSelectExpertise, selec
                         </li>
                     ))}
                 </ul>
-            </div>
-            <div>
-                <button onClick={onAdd}>Add</button>
-                <button onClick={onClear}>Clear</button>
             </div>
         </div>
     );

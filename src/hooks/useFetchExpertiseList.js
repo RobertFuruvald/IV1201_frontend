@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from "./useAuth";
+import  DataSource  from '../api/dataSource';
+
 
 function useFetchExpertiseList() {
     const auth = useAuth();
@@ -8,30 +10,20 @@ function useFetchExpertiseList() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setIsLoading(true);
-        fetch(`${process.env.REACT_APP_BACKEND_URL}applicant/competences`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${auth.token}`,
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch expertise list');
-                }
-                return response.json();
-            })
-            .then(data => {
+        const fetchExpertiseList = async () => {
+            setIsLoading(true);
+            try {
+                const data = await DataSource.getCompetences(auth);
                 setExpertiseList(data);
-            })
-            .catch(err => {
+            } catch (err) {
                 setError(err.message);
-            })
-            .finally(() => {
+            } finally {
                 setIsLoading(false);
-            });
-    }, [auth.token]);
+            }
+        };
+
+        fetchExpertiseList();
+    }, [auth]);
 
     return { expertiseList, isLoading, error };
 }

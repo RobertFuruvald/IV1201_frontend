@@ -8,7 +8,7 @@
 .expertiseListContainer {
     margin-bottom: 5px;
     border: 5px solid #ccc;
-    height: 400px;
+    height: 350px;
     border-radius: 20px;
     /* Rounded edges */
     overflow-y: scroll;

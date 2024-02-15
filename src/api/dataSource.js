@@ -62,9 +62,9 @@ const DataSource = {
   /* Gets a list of competence information from the server
   *Takes authentication as argument, gets a list with the competences that are available to choose from */
   getCompetences(auth) {
-    const response = DataSource.apiCall(`competences`, 'GET', '', auth.token);
+    const response = DataSource.apiCall(`applicant/competences`, 'GET', '', auth.token);
     return response.then(res => {
-      return res.text()
+      return res.json()
     }).catch(err => {
       throw new Error(err.message)
     });
