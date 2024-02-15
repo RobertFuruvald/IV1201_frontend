@@ -15,24 +15,27 @@ function SignUpView() {
   const [password, setPassword] = useInputChange('');
   const handleSignUp = async (e) => {
     e.preventDefault();
-     setError('');
-     if (!name || !surname || !pnr || !email || !username || !password) {
-         setError('All fields are required');
-          return;
+    setError('');
+    try {
+      if (!name || !surname || !pnr || !email || !username || !password) {
+        setError('All fields are required');
+        return;
       }
 
-     if(!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email)){
-       setError('Invalid email format');
+      if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email)) {
+        setError('Invalid email format');
       return;
-     }
+      }
     const signUpData = {name, surname, pnr, email, username, password};
-    await DataSource.registerUser(signUpData).then(response => {
+      const response = await DataSource.registerUser(signUpData);
       console.log('Registration successful:', response);
       navigate('/');
-    }).catch(error => {
+
+    } catch (error) {
       console.error('Error:', error);
-      setError(error);
-      });
+      setError(error.message);
+    }
+
   };
 
 
