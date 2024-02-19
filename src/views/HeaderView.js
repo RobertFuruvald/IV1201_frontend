@@ -6,7 +6,6 @@ import useCheckUserRole from '../hooks/useCheckUserRole';
 
 function HeaderView(props) {
   const auth = useAuth();
-  const { role } = useAuth;
 
   return (
     <header className="header">
@@ -18,8 +17,8 @@ function HeaderView(props) {
             </NavLink>
           </li>
           {useCheckUserRole("applicant") && <li>
-            <NavLink to="/application" className="active">
-              Application
+            <NavLink to="/application/submission" className="active">
+              Submit Application
             </NavLink>
           </li>}
           <li>
