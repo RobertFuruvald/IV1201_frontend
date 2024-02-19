@@ -1,26 +1,31 @@
+/**
+ * Custom hook to manage the state and operations for applicant submissions.
+ */
+
 import useListHandling from './useListHandling'; // Adjust path as necessary
 import useFetchExpertiseList from './useFetchExpertiseList';
+import useSubmitApplication from './useSubmitApplication';
+import { useState, useEffect } from 'react';
 
 function useApplicantSubmission() {
-  const { expertiseList, isLoading, error } = useFetchExpertiseList();
+  const { expertiseList, isLoading, loadingError } = useFetchExpertiseList();
+  const { postApplication, isSubmitting, submitError, submitSuccess } = useSubmitApplication();
+  const [validationError, setValidationError] = useState('');
 
   // Initialize useListHandling for selected expertise list
   const {
     list: selectedExpertiseList,
     toggleItem: toggleInExpertiseList,
-    clearList: clearSelectedExpertises,
   } = useListHandling([], expertise => expertise.competenceId);
 
   const {
     list: addedAvailabilityPeriods,
     addItem: addAvailabilityPeriod,
     removeItem: removeAvailabilityPeriod,
-  } = useListHandling([], expertise => expertise.competenceId);
+  } = useListHandling([], availability => availability);
 
   const {
     list: addedPersonalExpertises,
-    removeItem: removePersonalExpertise,
-    addItem: addPersonalExpertise,
     toggleItem: toggleInApplicationField,
     updateItemInList: updateYearsOfExperience
   } = useListHandling([], personalExpertise => personalExpertise.competenceId);
@@ -35,30 +40,89 @@ function useApplicantSubmission() {
   }
 
   const handleAvailabilityPeriodAdd = (fromDate, toDate) => {
-    const availabilityPeriod = {fromDate: fromDate, toDate: toDate};
-    console.log(availabilityPeriod);
-    addAvailabilityPeriod(availabilityPeriod);
+
+    const overlap = addedAvailabilityPeriods.some(period => {
+      return ((fromDate >= period.fromDate && fromDate <= period.toDate)
+        || (toDate >= period.fromDate && toDate <= period.toDate));
+    });
+
+    if (overlap)
+      throw new Error("The period is already covered by a previous entry");
+    else {
+      const availabilityPeriod = { fromDate: fromDate, toDate: toDate, id: (toDate + fromDate) };
+      addAvailabilityPeriod(availabilityPeriod);
+    }
   }
 
   const handleAvailabilityPeriodRemove = (availabilityPeriod) => {
     removeAvailabilityPeriod(availabilityPeriod);
   }
 
+  const submitApplication = async () => {
+    // Clearing existing submission errors
+    setValidationError('');
 
-  // Implement other handlers as necessary, using methods provided by useListHandling
+    // Validation checks
+    if (addedAvailabilityPeriods.length === 0) {
+      setValidationError("Please add at least one availability period.");
+      return;
+    }
+
+    const invalidExpertise = addedPersonalExpertises.find(expertise => {
+      return isNaN(expertise.yearsOfExperience) || expertise.yearsOfExperience <= 0;
+    });
+
+    if (invalidExpertise) {
+      setValidationError(`Invalid years of experience for ${invalidExpertise.name}.`);
+      return;
+    }
+
+    const competenceProfileInformationDTOs = addedPersonalExpertises.map(expertise => ({
+      competenceDTO: {
+        competenceId: expertise.competenceId,
+        name: expertise.name
+      },
+      yearsOfExperience: parseFloat(expertise.yearsOfExperience) // Ensure it's a float for when its sent to backend
+    }));
+
+    const availabilityPeriodDTOs = addedAvailabilityPeriods.map(period => ({
+      fromDate: period.fromDate,
+      toDate: period.toDate
+    }));
+
+    const applicationData = {
+      competenceProfileInformationDTOs,
+      availabilityPeriodDTOs
+    };
+    console.log(applicationData);
+
+    await postApplication(applicationData);
+  }
+
+
+
+
+
+  const cancelApplication = () => {
+
+  }
 
   return {
     expertiseList,
     isLoading,
-    error,
+    loadingError,
     selectedExpertiseList,
     addedPersonalExpertises,
     addedAvailabilityPeriods,
-    // Include other lists and handlers here
+    isSubmitting,
+    submitError: submitError || validationError,
+    submitSuccess,
     handleSelectExpertise,
     changeYearsOfExperience,
     handleAvailabilityPeriodAdd,
-    handleAvailabilityPeriodRemove
+    handleAvailabilityPeriodRemove,
+    submitApplication,
+    cancelApplication
   };
 }
 

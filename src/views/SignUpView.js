@@ -1,7 +1,8 @@
 import '../styling/signUpView.css';
-import React, {useState} from 'react';
+import '../styling/ErrorBox.css';
+import React, { useState } from 'react';
 import DataSource from '../api/dataSource';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useInputChange from "../hooks/useInputChange";
 
 function SignUpView() {
@@ -24,12 +25,12 @@ function SignUpView() {
 
       if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/).test(email)) {
         setError('Invalid email format');
-      return;
+        return;
       }
-    const signUpData = {name, surname, pnr, email, username, password};
+      const signUpData = { name, surname, pnr, email, username, password };
       const response = await DataSource.registerUser(signUpData);
       console.log('Registration successful:', response);
-      navigate('/', {state: 'Registration successful'});
+      navigate('/', { state: 'Registration successful' });
 
     } catch (error) {
       console.error('Error:', error);
@@ -44,7 +45,7 @@ function SignUpView() {
       <div>
         <div className="container module">
           <p className='pSignup'>Create an account</p>
-          <div className={`error ${error ? '' : 'error-hidden'}`}>{error}</div>
+
 
           <form onSubmit={handleSignUp}>
             <input
@@ -95,6 +96,7 @@ function SignUpView() {
             </button>
           </form>
         </div>
+        {error && <div className={'errorBox'}>{error}</div>}
       </div>
     </>
   );

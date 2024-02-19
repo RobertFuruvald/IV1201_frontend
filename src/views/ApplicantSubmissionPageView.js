@@ -1,65 +1,94 @@
-// ApplicantSubmissionPageView.js
 import React from 'react';
 import ExpertiseList from './ExpertiseList';
 import ApplicationField from './ApplicationField';
 import AvailabilityField from './AvailabilityField';
 import useApplicantSubmission from '../hooks/useApplicantSubmission';
+import '../styling/ErrorBox.css';
+
 
 function ApplicantSubmissionPageView() {
   const {
     expertiseList,
     selectedExpertiseList,
     isLoading,
-    error,
+    loadingError,
     addedPersonalExpertises,
     addedAvailabilityPeriods,
+    isSubmitting,
+    submitError,
+    submitSuccess,
     handleSelectExpertise,
     changeYearsOfExperience,
     handleAvailabilityPeriodAdd,
-    handleAvailabilityPeriodRemove
+    handleAvailabilityPeriodRemove,
+    submitApplication,
+    cancelApplication
   } = useApplicantSubmission();
 
+
+  // Early return for loading state
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loadingError) return <div>Error: {loadingError}</div>;
+
+  // Early return for success state
+  if (submitSuccess) return <div>Application submitted successfully!</div>;
+
+  const handleSubmit = async () => {
+    // You could reset submitError state here if needed
+    try {
+      await submitApplication();
+    } catch (error) {
+
+    }
+  };
 
   return (
     <div>
-      <div style={{
-        display: 'flex', // Ensure the container uses flexbox
-        flexDirection: 'row-reverse', // Elements are arranged in a column
-        justifyContent: 'flex-start', // Align content to the start of the flex container
-        alignItems: 'center', // Center-align items for wider screens
-        margin: '0 auto', // Center the container
-        width: '50%', // Allow the container to expand
-        paddingTop: '100px', // Add some padding at the top
-      }}>
-        <ExpertiseList
-          expertiseList={expertiseList}
-          selectedExpertiseList={selectedExpertiseList}
-          onSelectExpertise={handleSelectExpertise}
-        />
-        <ApplicationField
-          onYearsUpdate={changeYearsOfExperience}
-          onRemovePersonalExpertise={handleSelectExpertise}
-          addedExpertises={addedPersonalExpertises}
-        />
-      </div>
+      {!submitSuccess && ( // Only show the form and buttons if submission hasn't been successful
+        <>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row-reverse',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            margin: '0 auto',
+            width: '50%',
+            paddingTop: '100px',
+          }}>
+            <ExpertiseList
+              expertiseList={expertiseList}
+              selectedExpertiseList={selectedExpertiseList}
+              onSelectExpertise={handleSelectExpertise}
+            />
+            <ApplicationField
+              onYearsUpdate={changeYearsOfExperience}
+              onRemovePersonalExpertise={handleSelectExpertise}
+              addedExpertises={addedPersonalExpertises}
+            />
+          </div>
 
-      <div style={{ 
-        display: 'flex', // Ensure the container uses flexbox
-        justifyContent: 'flex-start', // Align content to the start of the flex container
-        alignItems: 'center', // Center-align items for wider screens
-        margin: '0 auto', // Center the container
-        width: '50%', // Allow the container to expand
-        paddingTop: '10px', // Add some padding at the top
-        }}>
-        <AvailabilityField
-          availabilityPeriods={addedAvailabilityPeriods}
-          onAdd={handleAvailabilityPeriodAdd}
-          onRemove={handleAvailabilityPeriodRemove}
-        />
-      </div>
-      {/* Additional components or content can be added here */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            margin: '0 auto',
+            width: '50%',
+            paddingTop: '10px',
+          }}>
+            <AvailabilityField
+              availabilityPeriods={addedAvailabilityPeriods}
+              onAdd={handleAvailabilityPeriodAdd}
+              onRemove={handleAvailabilityPeriodRemove}
+            />
+          </div>
+          <div>
+            <button type='button' onClick={handleSubmit} disabled={isSubmitting}>Submit</button>
+            <button type='button' onClick={cancelApplication}>Cancel</button>
+            {isSubmitting && <div>Submitting...</div>}
+            {submitError && <div className={'errorBox'}>{submitError}</div>}
+          </div>
+        </>
+      )}
     </div>
   );
 }

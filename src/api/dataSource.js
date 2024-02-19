@@ -92,7 +92,7 @@ const DataSource = {
   /* Register an application to the server for the current user
   *Takes authentication token, and form data as argument, gets a confirmation response from server */
   registerApplication(data, token) {
-    const response = DataSource.apiCall(`application`, 'POST', data, token);
+    const response = DataSource.apiCall(`applicant/apply`, 'POST', data, token);
     return response.then(res => {
       return res.text()
     }).catch(err => {

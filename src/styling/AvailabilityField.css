@@ -1,9 +1,9 @@
 .availabilityField {
-    min-height: 200px; /* Set the height */
-    overflow-y: scroll; /* Enable vertical scrolling */
-    border: 2px solid transparent; /* Invisible border */
-    border-radius: 20px; /* Rounded edges */
-    background-color: #ebe9e6; /* Slightly greyish paper color */
+    min-height: 200px;
+    overflow-y: scroll;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    background-color: #ebe9e6;
     padding-left: 10px;
     padding-right: 10px;
     width: 1000px;
