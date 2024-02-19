@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import '../styling/loginView.css'
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {useAuth} from "../hooks/useAuth";
 import useInputChange from "../hooks/useInputChange";
 import HomeView from "./HomeView";
@@ -12,6 +12,8 @@ export default function LoginView() {
   const [password, setPassword] = useInputChange('');
   const [error, setError] = useState('');
   let navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state || '';
 
   // Function to handle form submission
   const handleSubmit = async (event) => {
@@ -39,9 +41,9 @@ export default function LoginView() {
       <div className="container module">
         <p className='pLogin'>Log into your account</p>
         <div className={`error ${error ? '' : 'error-hidden'}`}>
-
         Invalid username or password
         </div>
+        <div className={`success ${state ? '' : 'error-hidden'}`}>{state}</div>
 
         <form onSubmit={handleSubmit}>
           <input
