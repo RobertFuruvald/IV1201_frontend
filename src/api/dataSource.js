@@ -62,9 +62,9 @@ const DataSource = {
   /* Gets a list of competence information from the server
   *Takes authentication as argument, gets a list with the competences that are available to choose from */
   getCompetences(auth) {
-    const response = DataSource.apiCall(`competences`, 'GET', '', auth.token);
+    const response = DataSource.apiCall(`applicant/competences`, 'GET', '', auth.token);
     return response.then(res => {
-      return res.text()
+      return res.json()
     }).catch(err => {
       throw new Error(err.message)
     });
@@ -92,7 +92,7 @@ const DataSource = {
   /* Register an application to the server for the current user
   *Takes authentication token, and form data as argument, gets a confirmation response from server */
   registerApplication(data, token) {
-    const response = DataSource.apiCall(`application`, 'POST', data, token);
+    const response = DataSource.apiCall(`applicant/apply`, 'POST', data, token);
     return response.then(res => {
       return res.text()
     }).catch(err => {

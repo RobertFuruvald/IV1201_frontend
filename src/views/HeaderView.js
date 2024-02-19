@@ -1,10 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import '../styling/headerView.css';
-import {useAuth} from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
+import useCheckUserRole from '../hooks/useCheckUserRole';
 
 function HeaderView(props) {
   const auth = useAuth();
+  const { role } = useAuth;
 
   return (
     <header className="header">
@@ -15,11 +17,11 @@ function HeaderView(props) {
               Home
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/alternativ1" className="active">
-              Alternativ 1
+          {useCheckUserRole("applicant") && <li>
+            <NavLink to="/application" className="active">
+              Application
             </NavLink>
-          </li>
+          </li>}
           <li>
             <NavLink to="/alternativ2" className="active">
               Alternativ 2

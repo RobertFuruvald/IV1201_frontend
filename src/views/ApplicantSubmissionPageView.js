@@ -1,53 +1,89 @@
-// ApplicantSubmissionPageView.js
 import React from 'react';
 import ExpertiseList from './ExpertiseList';
 import ApplicationField from './ApplicationField';
+import AvailabilityField from './AvailabilityField';
 import useApplicantSubmission from '../hooks/useApplicantSubmission';
+import useCheckUserRole from '../hooks/useCheckUserRole';
+import '../styling/ErrorBox.css';
+
+
 
 function ApplicantSubmissionPageView() {
   const {
     expertiseList,
     selectedExpertiseList,
     isLoading,
-    error,
+    loadingError,
+    addedPersonalExpertises,
+    addedAvailabilityPeriods,
+    isSubmitting,
+    submitError,
+    submitSuccess,
     handleSelectExpertise,
-    handleAddSelectedExpertise,
-    handleClearSelectedExpertise,
+    changeYearsOfExperience,
+    handleAvailabilityPeriodAdd,
+    handleAvailabilityPeriodRemove,
+    submitApplication,
+    cancelApplication
   } = useApplicantSubmission();
 
-  // Placeholder array for testing
-  const placeholderExpertises = [
-    { competenceId: 1, name: "Ticket Sales" },
-    { competenceId: 2, name: "Ride Operations" },
-    { competenceId: 3, name: "Food Service" },
-    { competenceId: 4, name: "Maintenance" },
-  ];
-
+  if (!useCheckUserRole("applicant")) {
+    return <div>Access Denied. Only applicants can submit job applications.</div>;
+  }
+  // Early return for loading state
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loadingError) return <div>Error: {loadingError}</div>;
+
+  // Early return for success state
+  if (submitSuccess) return <div><h1>Thank you for you application</h1> Your application was submitted successfully</div>;
 
   return (
-    <div  style={{
-      display: 'flex', // Ensure the container uses flexbox
-      flexDirection: 'row-reverse', // Elements are arranged in a column
-      justifyContent: 'flex-start', // Align content to the start of the flex container
-      alignItems: 'center', // Center-align items for wider screens
-      margin: '0 auto', // Center the container
-      width: '50%', // Allow the container to expand
-      paddingTop: '100px', // Add some padding at the top
-    }}>
-      <ExpertiseList
-        expertiseList={expertiseList}
-        selectedExpertiseList={selectedExpertiseList}
-        onAdd={handleAddSelectedExpertise}
-        onClear={handleClearSelectedExpertise}
-        onSelectExpertise={handleSelectExpertise}
-      />
-      <ApplicationField
-        addedExpertises={placeholderExpertises}
-      >
-      </ApplicationField>
-      {/* Additional components or content can be added here */}
+    <div>
+      {!submitSuccess && ( // Only show the form and buttons if submission hasn't been successful
+        <>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'row-reverse',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            margin: '0 auto',
+            width: '50%',
+            paddingTop: '100px',
+          }}>
+            <ExpertiseList
+              expertiseList={expertiseList}
+              selectedExpertiseList={selectedExpertiseList}
+              onSelectExpertise={handleSelectExpertise}
+            />
+            <ApplicationField
+              onYearsUpdate={changeYearsOfExperience}
+              onRemovePersonalExpertise={handleSelectExpertise}
+              addedExpertises={addedPersonalExpertises}
+            />
+          </div>
+
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            margin: '0 auto',
+            width: '50%',
+            paddingTop: '10px',
+          }}>
+            <AvailabilityField
+              availabilityPeriods={addedAvailabilityPeriods}
+              onAdd={handleAvailabilityPeriodAdd}
+              onRemove={handleAvailabilityPeriodRemove}
+            />
+          </div>
+          <div>
+            <button type='button' onClick={submitApplication} disabled={isSubmitting}>Submit</button>
+            <button type='button' onClick={cancelApplication}>Cancel</button>
+            {isSubmitting && <div>Submitting...</div>}
+            {submitError && <div className={'errorBox'}>{submitError}</div>}
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,0 +1,11 @@
+.availabilityField {
+    min-height: 200px;
+    overflow-y: scroll;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    background-color: #ebe9e6;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 1000px;
+
+}
