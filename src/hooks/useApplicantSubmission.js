@@ -3,12 +3,13 @@
  */
 
 import useListHandling from './useListHandling'; // Adjust path as necessary
-import useFetchExpertiseList from './useFetchExpertiseList';
+import useFetchList from './useFetchList';
 import useSubmitApplication from './useSubmitApplication';
 import { useState, useEffect } from 'react';
+import DataSource from '../api/dataSource';
 
 function useApplicantSubmission() {
-  const { expertiseList, isLoading, loadingError } = useFetchExpertiseList();
+  const { list: expertiseList, isLoading, loadingError } = useFetchList(DataSource.getCompetences);
   const { postApplication, isSubmitting, submitError, submitSuccess } = useSubmitApplication();
   const [validationError, setValidationError] = useState('');
 
