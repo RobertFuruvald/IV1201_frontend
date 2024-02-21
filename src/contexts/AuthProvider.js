@@ -1,10 +1,12 @@
 import { useContext, createContext, useState } from "react";
-
+import ROLES from "../config/roles";
+import { useLocation, Navigate, useNavigate, Outlet } from "react-router-dom";
 // Create a context for authentication data
 export const AuthContext = createContext(null);
 
 // Create an authentication provider component
 export const AuthProvider = ({ children }) => {
+  let navigate = useNavigate();
   // State variables for token and user information
   const [token, setToken] = useState(sessionStorage.getItem("site") || "");
   const [user, setUsername] = useState(sessionStorage.getItem("user") || "");
@@ -30,11 +32,17 @@ export const AuthProvider = ({ children }) => {
         // Set the token and username in state
         setUsername(data.username);
         setToken(res.token);
-        setRole(res.roles);
+        setRole(res.roles[0])
         // Save the token to local storage
         sessionStorage.setItem("site", res.token);
-        sessionStorage.setItem("role", res.roles);
+        sessionStorage.setItem("role", res.roles[0]);
         sessionStorage.setItem("user", data.username);
+
+        if (res.roles[0] === ROLES.Applicant) {
+          navigate("/applicant");
+        } else if (res.roles[0] === ROLES.Recruiter) {
+          navigate("/recruiter");
+        }
         return;
       }
       // If authentication fails, throw the error

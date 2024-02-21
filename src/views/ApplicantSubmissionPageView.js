@@ -5,10 +5,11 @@ import AvailabilityField from './AvailabilityField';
 import useApplicantSubmission from '../hooks/useApplicantSubmission';
 import useCheckUserRole from '../hooks/useCheckUserRole';
 import '../styling/ErrorBox.css';
-
-
+import { useAuth } from "../hooks/useAuth";
+import ROLES from "../config/roles";
 
 function ApplicantSubmissionPageView() {
+  const auth = useAuth();
   const {
     expertiseList,
     selectedExpertiseList,
@@ -26,8 +27,8 @@ function ApplicantSubmissionPageView() {
     submitApplication,
     cancelApplication
   } = useApplicantSubmission();
-
-  if (!useCheckUserRole("applicant")) {
+  
+  if (auth.role !== ROLES.Applicant) {
     return <div>Access Denied. Only applicants can submit job applications.</div>;
   }
   // Early return for loading state
@@ -78,7 +79,6 @@ function ApplicantSubmissionPageView() {
           </div>
           <div>
             <button type='button' onClick={submitApplication} disabled={isSubmitting}>Submit</button>
-            <button type='button' onClick={cancelApplication}>Cancel</button>
             {isSubmitting && <div>Submitting...</div>}
             {submitError && <div className={'errorBox'}>{submitError}</div>}
           </div>

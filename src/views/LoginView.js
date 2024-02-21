@@ -5,6 +5,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from "../hooks/useAuth";
 import useInputChange from "../hooks/useInputChange";
 import HomeView from "./HomeView";
+import ApplicantSubmissionPageView from '../views/ApplicantSubmissionPageView';
+import ROLES from "../config/roles";
+import RecruiterView from "../views/RecruiterView";
 
 export default function LoginView() {
   const auth = useAuth();
@@ -24,7 +27,7 @@ export default function LoginView() {
     try {
       if (username !== '' && password !== '') {
         await auth.login({ username: username, password: password });
-        navigate("/hello")
+        //navigate("/hello")
       }
     } catch (err) {
       setError(err); // Set error state if authentication fails then error message to the console
@@ -77,7 +80,7 @@ export default function LoginView() {
           Invalid username or password
         </div>
         }
-      </div> : <HomeView />}
+      </div> : auth.role === ROLES.Applicant ?  <ApplicantSubmissionPageView/> :<RecruiterView/> }
 
     </>
   );

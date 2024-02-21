@@ -12,25 +12,16 @@ function HeaderView(props) {
       <nav>
         <ul className="header-list">
           <li>
-            <NavLink to="/" className="active">
+          <NavLink to={`/${auth.role}`} className="active">
               Home
             </NavLink>
           </li>
-          {useCheckUserRole("applicant") && <li>
-            <NavLink to="/application/submission" className="active">
-              Submit Application
+          {<li>
+            <NavLink to="contact" className="active">
+            Contact 
             </NavLink>
           </li>}
-          <li>
-            <NavLink to="/alternativ2" className="active">
-              Alternativ 2
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/alternativ3" className="active">
-              Alternativ 3
-            </NavLink>
-          </li>
+ 
           {auth.token ? (
             <>
               <li>
