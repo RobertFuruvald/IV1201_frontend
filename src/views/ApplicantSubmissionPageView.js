@@ -3,13 +3,9 @@ import ExpertiseList from './ExpertiseList';
 import ApplicationField from './ApplicationField';
 import AvailabilityField from './AvailabilityField';
 import useApplicantSubmission from '../hooks/useApplicantSubmission';
-import useCheckUserRole from '../hooks/useCheckUserRole';
 import '../styling/ErrorBox.css';
-import { useAuth } from "../hooks/useAuth";
-import ROLES from "../config/roles";
 
 function ApplicantSubmissionPageView() {
-  const auth = useAuth();
   const {
     expertiseList,
     selectedExpertiseList,
@@ -25,12 +21,8 @@ function ApplicantSubmissionPageView() {
     handleAvailabilityPeriodAdd,
     handleAvailabilityPeriodRemove,
     submitApplication,
-    cancelApplication
   } = useApplicantSubmission();
-  
-  if (auth.role !== ROLES.Applicant) {
-    return <div>Access Denied. Only applicants can submit job applications.</div>;
-  }
+
   // Early return for loading state
   if (isLoading) return <div>Loading...</div>;
   if (loadingError) return <div>Error: {loadingError}</div>;

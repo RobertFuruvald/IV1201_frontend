@@ -113,9 +113,10 @@ const DataSource = {
   /* Gets a list of applications from the server
   *Takes authorization as argument*/
   getListOfApplications(auth) {
-    const response = DataSource.apiCall('applications', 'GET', auth.user, auth.token);
+    const response = DataSource.apiCall(`recruiter/applications`, 'GET', '', auth.token);
+    console.log(response);
     return response.then(res => {
-      return res.text()
+      return res.json()
     }).catch(err => {
       throw new Error(err.message)
     });
