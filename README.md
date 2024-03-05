@@ -6,7 +6,7 @@ This project is the frontend component of a recruitment application, developed u
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/IV1201_frontend.git
+    git clone https://github.com/RobertFuruvald/IV1201_frontend.git
     ```
 
 2. **Navigate into the project directory:**
